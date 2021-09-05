@@ -5,10 +5,35 @@
     display:inline-block;
 }
 
+.node-start {
+    background-color: green;
+}
+
 .node-finish {
     background-color: red;
 }
 
-.node-start {
-    background-color: green;
+.node-wall{
+    background-color: black;
 }
+
+.hover{
+    outline:solid 4px black;
+}
+
+.shortest-path{
+    background-color: aquamarine !important;
+}
+
+
+.node-visited{
+    background-color: grey;
+    animation-name: visitNode;
+    animation-duration: 0.4s;
+}
+
+@keyframes visitNode {
+    from{background-color: rgb(57, 138, 215);}
+    to{background-color: rgb(113, 140, 160);}
+}
+

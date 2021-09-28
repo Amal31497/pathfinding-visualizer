@@ -44,17 +44,19 @@ export default function Node(props){
 
         function buildWall(event,row,col){
             event.preventDefault();
-            document.getElementById(`node-${row}-${col}`).classList.add("node-wall");
+            grid[row][col].isWall = true;
+            document.getElementById(`node-${row}-${col}`).classList.add("node-wall");          
         }
+
 
         return (
             <div
                 id={`node-${row}-${col}`}
-                className={`node ${nodeClassName} ${mouseOver == true ? "hover" : ""}`}
-                onClick={(event) => buildWall(event,row, col)}
+                className={`node ${nodeClassName} `}
+                onClick={(event) => buildWall(event,row,col)}
                 // onMouseUp={() => onMouseUp()}
-                // onMouseEnter={() => setMouseOver(true)}
-                // onMouseLeave={() => setMouseOver(false)}
+                onMouseEnter={() => setMouseOver(true)}
+                onMouseLeave={() => setMouseOver(false)}
             ></div>
         )
 }

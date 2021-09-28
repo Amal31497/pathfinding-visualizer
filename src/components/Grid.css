@@ -5,3 +5,9 @@
 .tableRow{
     line-height: 10px;
 }
+
+.secondTierNavigation{
+    display:flex;
+    justify-content: space-around;
+    margin-bottom:20px;
+}

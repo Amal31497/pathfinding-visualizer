@@ -316,11 +316,11 @@ function Grid() {
             </div>
             <div style={{display:"flex", justifyContent:"space-around"}}>
                 <div style={{display:"flex"}}>
-                    <div className="node node-start"></div>
+                    <div className="startNodeCircle"></div>
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Start</p>
                 </div>
                 <div style={{display:"flex"}}>
-                    <div className="node node-finish"></div>
+                    <div className="finishNodeAnimation"></div>
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Target</p>
                 </div>
                 <div style={{display:"flex"}}>

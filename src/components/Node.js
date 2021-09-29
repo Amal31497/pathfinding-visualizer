@@ -56,11 +56,12 @@ export default function Node(props){
                 onMouseDown={(event) => mouseIsPressed ? buildWall(event, row, col) : null}
                 onMouseUp={() => setMouseIsPressed(false)}
             >
-                {/* <div>
                     {isStart == true &&
-                        <BsArrowsMove size={10} />
+                        <div className="startNodeCircle"></div>
                     }
-                </div> */}
+                    {isFinish == true && 
+                        <div className="finishNodeAnimation"></div>
+                    }  
             </div>
         )
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import Node from "./Node";
-import { dijkstra, findShortestPathDijkstra, returnTrue } from "../algorithms/BFSAndDijkstra.js";
+import { dijkstra, findShortestPathDijkstra } from "../algorithms/BFSAndDijkstra.js";
+import { DFS } from "../algorithms/DFS.js";
 import { AStar, findAStarShortestPath } from "../algorithms/AStar.js";
 import "./Grid.css";
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -249,6 +250,21 @@ function Grid() {
         }
     }
 
+    function animateDFS(){
+        // const startNode = grid[START_NODE_ROW][START_NODE_COL];
+        // const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        // const visitedNodesInorder = DFS(grid,startNode,finishNode);
+
+        // for(let node = 0; node < visitedNodesInorder.length; node++){
+        //     setTimeout(() => {
+        //         if(!visitedNodesInorder[node].isStart && !visitedNodesInorder[node].isFinish){
+        //             document.getElementById(`node-${visitedNodesInorder[node].row}-${visitedNodesInorder[node].col}`).classList.add("node-visited")
+        //         }
+        //     }, node * 4.5)
+        // }
+        console.log("Still in development")
+    }
+
     return (
         <div className="grid" onMouseDown={() => setMouseIsPressed(true)} onMouseUp={() => setMouseIsPressed(false)}>
             <div className="secondTierNavigation">
@@ -265,13 +281,13 @@ function Grid() {
                         <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => generateRandomMaze(300)}>Random Maze(300)</button></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-                
+
                 {vizualizerInitiated == false ? 
-                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? animateDijkstra : pickedAlgorithm == "A Star" ? animateAStar : toggleSelectAlgoPopover}>Visualize</button>
+                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? animateDijkstra : pickedAlgorithm == "A Star" ? animateAStar : pickedAlgorithm == "DFS" ? () => animateDFS : toggleSelectAlgoPopover}>Visualize</button>
                     :
-                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? (event) => animateDijkstra(event) : pickedAlgorithm == "A Star" ? () => animateAStar : toggleSelectAlgoPopover}>Visualize <span><AiOutlineLoading3Quarters className="vizualizerInitiated" size={20} /></span> </button>
+                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? (event) => animateDijkstra(event) : pickedAlgorithm == "A Star" ? () => animateAStar : pickedAlgorithm == "DFS" ? () => animateDFS : toggleSelectAlgoPopover}>Visualize <span><AiOutlineLoading3Quarters className="vizualizerInitiated" size={20} /></span> </button>
                 }
-                
+                {/* <button onClick={animateDFS}>DFS</button> */}
                 <button className="secondTierNavigationSingleActionButton" onClick={clearBoard}>Clear Board</button>
                 <Dropdown className="secondTierNavigationSingleActionButton">
                     <Dropdown.Toggle className="secondTierNavigationDropDownButton">
@@ -281,8 +297,31 @@ function Grid() {
                     <Dropdown.Menu className="dropDownModal">
                         <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("dijkstra")}>Dijkstra</button></Dropdown.Item>
                         <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("A Star")}>A*</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("DFS")}>Depth First Search</button></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+            </div>
+            <div style={{display:"flex", justifyContent:"space-around"}}>
+                <div style={{display:"flex"}}>
+                    <div className="node node-start"></div>
+                    <p style={{marginLeft:"10px"}}> - Start</p>
+                </div>
+                <div style={{display:"flex"}}>
+                    <div className="node node-finish"></div>
+                    <p style={{marginLeft:"10px"}}> - Target</p>
+                </div>
+                <div style={{display:"flex"}}>
+                    <div className="node node-visited"></div>
+                    <p style={{marginLeft:"10px"}}> - Visited Node</p>
+                </div>
+                <div style={{display:"flex"}}>
+                    <div className="node node-wall"></div>
+                    <p style={{marginLeft:"10px"}}> - Wall</p>
+                </div>
+                <div style={{display:"flex"}}>
+                    <div className="node shortest-path"></div>
+                    <p style={{marginLeft:"10px"}}> - Shortest Path</p>
+                </div>
             </div>
             {grid.map((row, rowIdx) => {
                 return (

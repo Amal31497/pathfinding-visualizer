@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import Node from "./Node";
 import { dijkstra, findShortestPathDijkstra } from "../algorithms/BFSAndDijkstra.js";
-import { DFS } from "../algorithms/DFS.js";
+import { DFS, findShortestPathDFS } from "../algorithms/DFS.js";
 import { AStar, findAStarShortestPath } from "../algorithms/AStar.js";
 import "./Grid.css";
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -10,8 +10,8 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 let START_NODE_ROW = 10;
 let START_NODE_COL = 10;
-let FINISH_NODE_ROW = 2;
-let FINISH_NODE_COL = 40;
+let FINISH_NODE_ROW = 17;
+let FINISH_NODE_COL = 30;
 
 
 function Grid() {
@@ -251,18 +251,22 @@ function Grid() {
     }
 
     function animateDFS(){
-        // const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        // const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-        // const visitedNodesInorder = DFS(grid,startNode,finishNode);
+        const startNode = grid[START_NODE_ROW][START_NODE_COL];
+        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const visitedNodesInorder = DFS(grid,startNode,finishNode);
+        const shortestPath = findShortestPathDFS(finishNode);
 
-        // for(let node = 0; node < visitedNodesInorder.length; node++){
-        //     setTimeout(() => {
-        //         if(!visitedNodesInorder[node].isStart && !visitedNodesInorder[node].isFinish){
-        //             document.getElementById(`node-${visitedNodesInorder[node].row}-${visitedNodesInorder[node].col}`).classList.add("node-visited")
-        //         }
-        //     }, node * 4.5)
-        // }
-        console.log("Still in development")
+        for(let node = 0; node < visitedNodesInorder.length; node++){
+            setTimeout(() => {
+                if(!visitedNodesInorder[node].isStart && !visitedNodesInorder[node].isFinish){
+                    document.getElementById(`node-${visitedNodesInorder[node].row}-${visitedNodesInorder[node].col}`).classList.add("node-visited")
+                }
+            }, node * 4.5)
+        }
+
+        setTimeout(() => {
+            animateShortestPath(shortestPath);
+        }, visitedNodesInorder.length * 0.8)
     }
 
     return (
@@ -282,12 +286,21 @@ function Grid() {
                     </Dropdown.Menu>
                 </Dropdown>
 
-                {vizualizerInitiated == false ? 
-                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? animateDijkstra : pickedAlgorithm == "A Star" ? animateAStar : pickedAlgorithm == "DFS" ? () => animateDFS : toggleSelectAlgoPopover}>Visualize</button>
-                    :
-                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? (event) => animateDijkstra(event) : pickedAlgorithm == "A Star" ? () => animateAStar : pickedAlgorithm == "DFS" ? () => animateDFS : toggleSelectAlgoPopover}>Visualize <span><AiOutlineLoading3Quarters className="vizualizerInitiated" size={20} /></span> </button>
-                }
-                {/* <button onClick={animateDFS}>DFS</button> */}
+
+                <button className="secondTierNavigationSingleActionButton"
+                    onClick={pickedAlgorithm == "dijkstra" ?
+                        animateDijkstra : pickedAlgorithm == "A Star" ?
+                            animateAStar : pickedAlgorithm == "DFS" ?
+                                animateDFS : toggleSelectAlgoPopover}>
+                    Visualize
+                    {vizualizerInitiated == true ?
+                        <span><AiOutlineLoading3Quarters className="vizualizerInitiated" size={20} /></span>
+                        :
+                        null
+                    }
+                </button>
+
+              
                 <button className="secondTierNavigationSingleActionButton" onClick={clearBoard}>Clear Board</button>
                 <Dropdown className="secondTierNavigationSingleActionButton">
                     <Dropdown.Toggle className="secondTierNavigationDropDownButton">
@@ -304,23 +317,23 @@ function Grid() {
             <div style={{display:"flex", justifyContent:"space-around"}}>
                 <div style={{display:"flex"}}>
                     <div className="node node-start"></div>
-                    <p style={{marginLeft:"10px"}}> - Start</p>
+                    <p style={{marginLeft:"10px", fontWeight:"700"}}> - Start</p>
                 </div>
                 <div style={{display:"flex"}}>
                     <div className="node node-finish"></div>
-                    <p style={{marginLeft:"10px"}}> - Target</p>
+                    <p style={{marginLeft:"10px", fontWeight:"700"}}> - Target</p>
                 </div>
                 <div style={{display:"flex"}}>
                     <div className="node node-visited"></div>
-                    <p style={{marginLeft:"10px"}}> - Visited Node</p>
+                    <p style={{marginLeft:"10px", fontWeight:"700"}}> - Visited Node</p>
                 </div>
                 <div style={{display:"flex"}}>
                     <div className="node node-wall"></div>
-                    <p style={{marginLeft:"10px"}}> - Wall</p>
+                    <p style={{marginLeft:"10px", fontWeight:"700"}}> - Wall</p>
                 </div>
                 <div style={{display:"flex"}}>
                     <div className="node shortest-path"></div>
-                    <p style={{marginLeft:"10px"}}> - Shortest Path</p>
+                    <p style={{marginLeft:"10px", fontWeight:"700"}}> - Shortest Path</p>
                 </div>
             </div>
             {grid.map((row, rowIdx) => {

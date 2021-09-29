@@ -1,13 +1,138 @@
 .grid{
-    padding:20px 0 20px 0;
+    padding:0px 0px 20px 0px;
 }
 
 .tableRow{
     line-height: 10px;
 }
 
+.noAlgoSelectedToolTip{
+    background-color: white;
+    color: rgb(179,58,58);
+    border:none;
+    border-radius: 10rem;
+    font-size: 17px;
+    font-weight:700;
+    width:280px;
+    height:26px;
+    position:absolute;
+    left:40%;
+    top:40px;
+    animation-name: tooltip;
+    animation-delay: 1s;
+    animation-duration: 2s;
+}
+
+@keyframes tooltip {
+    from{opacity: 100;}
+    to{opacity: 0;}
+}
+
 .secondTierNavigation{
+    position:relative;
     display:flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    height:60px;
+    width:100%;
     margin-bottom:20px;
+    background-color: rgb(34,37,41);
+}
+
+.secondTierNavigationDropDownButton{
+    width:60% !important;
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    color:white !important;
+    font-weight: 700 !important;
+}
+
+.secondTierNavigationDropDownButton:hover{
+    width:60% !important;
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    color:rgb(57, 138, 215) !important;
+    font-weight: 700 !important;
+}
+
+.secondTierNavigationDropDownButton:focus{
+    width:60% !important;
+    background-color: rgb(57, 138, 215) !important;
+    outline: none !important;
+    border: none !important;
+    color:white !important;
+    font-weight: 700 !important;
+}
+
+.secondTierNavigationSingleActionButton{
+    width:60% !important;
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    color:white !important;
+    font-weight: 700 !important;
+}
+
+.secondTierNavigationSingleActionButton:hover{
+    width:60% !important;
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    color:rgb(57, 138, 215) !important;
+    font-weight: 700 !important;
+}
+
+.secondTierNavigationSingleActionButton:focus{
+    width:60% !important;
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    color:white !important;
+    font-weight: 700 !important;
+}
+
+.dropDownModal{
+    background-color: rgb(34,37,41) !important;
+    width:50%;
+}
+
+.dropDownModalButton{
+    font-size: 14.5px;
+    color:white;
+    background-color: transparent;
+    border:none;
+    outline:none;
+    width:100%;
+    height:100%;
+}
+
+.dropDownModalButton:hover{
+    color:rgb(57, 138, 215);
+    font-weight:600;
+}
+
+.dropdownItem:hover{
+    background-color: transparent !important;
+}
+
+.vizualizerInitiated{
+    /* color:red !important; */
+    animation-name: loading;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-duration: 0.72s;
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+
+    from{color:red};
+    to{color:blue};
 }

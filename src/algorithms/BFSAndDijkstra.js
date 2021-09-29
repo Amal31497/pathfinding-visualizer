@@ -6,7 +6,7 @@ export function dijkstra(grid, startNode, finishNode) {
 
     startNode.distance = 0;
 
-    while (true) {
+    while (unvisitedNodes.length > 0) {
         unvisitedNodes.sort((a, b) => a.distance - b.distance);
 
         const closestNeighbor = unvisitedNodes.shift();

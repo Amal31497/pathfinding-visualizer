@@ -3,6 +3,8 @@ import Grid from "./Grid";
 import "./Node.css";
 
 
+
+
 export default function Node(props){
 
 
@@ -13,6 +15,7 @@ export default function Node(props){
         const [isWall, setIsWall] = useState();
         const [isVisited, setIsVisited] = useState();
         const [grid, setGrid] = useState();
+        const [mouseIsPressed, setMouseIsPressed] = useState(false);
 
         useEffect(() => {
             setCol(props.col);
@@ -22,11 +25,8 @@ export default function Node(props){
             setIsWall(props.isWall);
             setIsVisited(props.isVisited);
             setGrid(props.grid)
-        },[props.col,props.row,props.isFinish,props.isStart,props.isWall,props.isVisited,props.grid])
-
-
-
-        const [mouseOver, setMouseOver] = useState(false);
+            setMouseIsPressed(props.mouseIsPressed);
+        },[props.col,props.row,props.isFinish,props.isStart,props.isWall,props.isVisited,props.grid,props.mouseIsPressed])
 
         let nodeClassName = "";
 
@@ -48,15 +48,19 @@ export default function Node(props){
             document.getElementById(`node-${row}-${col}`).classList.add("node-wall");          
         }
 
-
         return (
             <div
                 id={`node-${row}-${col}`}
                 className={`node ${nodeClassName} `}
-                onClick={(event) => buildWall(event,row,col)}
-                // onMouseUp={() => onMouseUp()}
-                onMouseEnter={() => setMouseOver(true)}
-                onMouseLeave={() => setMouseOver(false)}
-            ></div>
+                onMouseEnter={(event) => mouseIsPressed ? buildWall(event, row, col) : null}
+                onMouseDown={(event) => mouseIsPressed ? buildWall(event, row, col) : null}
+                onMouseUp={() => setMouseIsPressed(false)}
+            >
+                {/* <div>
+                    {isStart == true &&
+                        <BsArrowsMove size={10} />
+                    }
+                </div> */}
+            </div>
         )
 }

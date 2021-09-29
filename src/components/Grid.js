@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import Node from "./Node";
-import { dijkstra, findShortestPathDijkstra } from "../algorithms/BFSAndDijkstra.js";
+import { dijkstra, findShortestPathDijkstra, returnTrue } from "../algorithms/BFSAndDijkstra.js";
 import { AStar, findAStarShortestPath } from "../algorithms/AStar.js";
 import "./Grid.css";
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+
 
 let START_NODE_ROW = 10;
 let START_NODE_COL = 10;
@@ -14,7 +16,10 @@ let FINISH_NODE_COL = 40;
 function Grid() {
 
     const [grid, setGrid] = useState([]);
+    const [pickedAlgorithm, setPickedAlgorithm] = useState("");
     const [mouseIsPressed, setMouseIsPressed] = useState(false);
+    const [algoNotSelected, setAlgoNotSelected] = useState(false);
+    const [vizualizerInitiated, setVizualizerInitiated] = useState(false);
 
     const createNode = (col, row) => {
         return {
@@ -47,7 +52,12 @@ function Grid() {
         getInitialGrid();
     },[])
 
-
+    function toggleSelectAlgoPopover(){
+        setAlgoNotSelected(true);
+        setTimeout(() => {
+            setAlgoNotSelected(false);
+        },2000)
+    }
 
     function animateShortestPath(path){
         for(let i = 0; i < path.length; i++){
@@ -59,35 +69,14 @@ function Grid() {
         }
     }
 
-    function animateDijkstra(){
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-        const visitedNodesInorder = dijkstra(grid,startNode,finishNode);
-        const shortestPathDijkstra = findShortestPathDijkstra(finishNode);
-        visualizeDijkstra(visitedNodesInorder);
-
-        setTimeout(() => {
-            animateShortestPath(shortestPathDijkstra);
-        }, 4.5 * visitedNodesInorder.length)
-        
-    }
-
-    function visualizeDijkstra(nodes){
-        for(let node = 0; node < nodes.length; node++){
-            setTimeout(() => {
-                if(!nodes[node].isStart && !nodes[node].isFinish){
-                    document.getElementById(`node-${nodes[node].row}-${nodes[node].col}`).classList.add("node-visited")
-                }
-            }, node * 4)
-        }
-    }
 
 
-    function generateRandomMaze(){
 
+    function generateRandomMaze(number){
+        clearBoard();
         let randomMazeNodes = [];
 
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < number; i++){
             let randomRow = Math.floor(Math.random() * 20);
             let randomCol = Math.floor(Math.random() * 50);
 
@@ -108,6 +97,7 @@ function Grid() {
 
 
     function generateRandomVerticalMaze(){
+        clearBoard();
         let walls = [];
         for(let node = 0; node < grid[0].length; node++){
             walls.push(grid[0][node]);
@@ -153,6 +143,7 @@ function Grid() {
 
 
     function generateRandomHorizontalMaze(){
+        clearBoard();
         let walls = [];
         for(let node = 0; node < grid[0].length; node++){
             walls.push(grid[0][node]);
@@ -200,11 +191,11 @@ function Grid() {
     }
 
     function animateAStar(){
+        setVizualizerInitiated(true);
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodes = AStar(grid, startNode, finishNode);
         const shortestPath = findAStarShortestPath(finishNode);
-
         for(let i = 0; i < visitedNodes.length; i++){
             setTimeout(() => {
                 if(!visitedNodes[i].isFinish && !visitedNodes[i].isStart){
@@ -216,33 +207,80 @@ function Grid() {
         setTimeout(() => {
             animateShortestPath(shortestPath);
         }, visitedNodes.length * 4.5)
+
+        setTimeout(() => {
+            setVizualizerInitiated(false);
+        }, visitedNodes.length * 9)
         
     }
+    
+    function animateDijkstra(){
+        const startNode = grid[START_NODE_ROW][START_NODE_COL];
+        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const visitedNodesInorder = dijkstra(grid,startNode,finishNode);
+        const shortestPathDijkstra = findShortestPathDijkstra(finishNode);
 
+        for(let node = 0; node < visitedNodesInorder.length; node++){
+            setTimeout(() => {
+                if(!visitedNodesInorder[node].isStart && !visitedNodesInorder[node].isFinish){
+                    document.getElementById(`node-${visitedNodesInorder[node].row}-${visitedNodesInorder[node].col}`).classList.add("node-visited")
+                }
+            }, node * 4.5)
+        }
+
+        setTimeout(() => {
+            animateShortestPath(shortestPathDijkstra);
+        }, 4.5 * visitedNodesInorder.length)
+
+        setTimeout(() => {
+            setVizualizerInitiated(false);
+        }, visitedNodesInorder.length * 9)
+    }
+
+    function clearBoard(){
+        for(let row = 0; row < grid.length; row++){
+            for(let col = 0; col < grid[0].length; col++){
+                if(grid[row][col].isStart == false && grid[row][col].isFinish == false){
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    document.getElementById(`node-${row}-${col}`).classList = "node";
+                }
+            }
+        }
+    }
 
     return (
-        <div className="grid">
+        <div className="grid" onMouseDown={() => setMouseIsPressed(true)} onMouseUp={() => setMouseIsPressed(false)}>
             <div className="secondTierNavigation">
-                <Dropdown>
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                <Dropdown className="secondTierNavigationSingleActionButton">
+                    <Dropdown.Toggle className="secondTierNavigationDropDownButton">
                         Draw Maze
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                        <Dropdown.Item><button onClick={generateRandomVerticalMaze}>Generate Vertical Maze</button></Dropdown.Item>
-                        <Dropdown.Item><button onClick={generateRandomHorizontalMaze}>Generate Horizontal Maze</button></Dropdown.Item>
-                        <Dropdown.Item><button onClick={generateRandomMaze}>Generate Random Maze</button></Dropdown.Item>
+                    <Dropdown.Menu className="dropDownModal">
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={generateRandomVerticalMaze}>Vertical Maze</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={generateRandomHorizontalMaze}>Horizontal Maze</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => generateRandomMaze(100)}>Random Maze(100)</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => generateRandomMaze(200)}>Random Maze(200)</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => generateRandomMaze(300)}>Random Maze(300)</button></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-
-                <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Select Algorithm
+                
+                {vizualizerInitiated == false ? 
+                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? animateDijkstra : pickedAlgorithm == "A Star" ? animateAStar : toggleSelectAlgoPopover}>Visualize</button>
+                    :
+                    <button className="secondTierNavigationSingleActionButton" onClick={pickedAlgorithm == "dijkstra" ? (event) => animateDijkstra(event) : pickedAlgorithm == "A Star" ? () => animateAStar : toggleSelectAlgoPopover}>Visualize <span><AiOutlineLoading3Quarters className="vizualizerInitiated" size={20} /></span> </button>
+                }
+                
+                <button className="secondTierNavigationSingleActionButton" onClick={clearBoard}>Clear Board</button>
+                <Dropdown className="secondTierNavigationSingleActionButton">
+                    <Dropdown.Toggle className="secondTierNavigationDropDownButton">
+                        {pickedAlgorithm !== "" ? pickedAlgorithm : "Select Algorithm"}
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                        <Dropdown.Item><button onClick={() => animateDijkstra("dijkstra")}>Visualize Dijkstra</button></Dropdown.Item>
-                        <Dropdown.Item><button onClick={animateAStar}>Visualize A*</button></Dropdown.Item>
+                    <Dropdown.Menu className="dropDownModal">
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("dijkstra")}>Dijkstra</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("A Star")}>A*</button></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -261,13 +299,18 @@ function Grid() {
                                     isWall={isWall}
                                     isVisited={isVisited}
                                     grid={grid}
-                                    // buildWall={buildWall(row,col)}
+                                    mouseIsPressed={mouseIsPressed}
                                 />
                             )
                         })}
                     </div>
                 )
             })}
+            {algoNotSelected == true ?
+                <p className="noAlgoSelectedToolTip">Please select an algorithm first!</p>
+                :
+                null
+            }
         </div>
     )
 }

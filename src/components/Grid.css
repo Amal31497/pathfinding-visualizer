@@ -1,5 +1,6 @@
 .grid{
     padding:0px 0px 20px 0px;
+    position:relative;
 }
 
 .tableRow{
@@ -95,7 +96,7 @@
 
 .dropDownModal{
     background-color: rgb(34,37,41) !important;
-    width:50%;
+    width:60%;
 }
 
 .dropDownModalButton{
@@ -118,7 +119,6 @@
 }
 
 .vizualizerInitiated{
-    /* color:red !important; */
     animation-name: loading;
     animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;

@@ -4,6 +4,7 @@ import Node from "./Node";
 import { dijkstra, findShortestPathDijkstra } from "../algorithms/BFSAndDijkstra.js";
 import { DFS, findShortestPathDFS } from "../algorithms/DFS.js";
 import { AStar, findAStarShortestPath } from "../algorithms/AStar.js";
+import InfoModal from "./InfoModal";
 import "./Grid.css";
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
@@ -21,6 +22,7 @@ function Grid() {
     const [mouseIsPressed, setMouseIsPressed] = useState(false);
     const [algoNotSelected, setAlgoNotSelected] = useState(false);
     const [vizualizerInitiated, setVizualizerInitiated] = useState(false);
+    const [infoModal, setInfoModal] = useState(false);
 
     const createNode = (col, row) => {
         return {
@@ -269,7 +271,7 @@ function Grid() {
 
     return (
         <div className="grid" onMouseDown={() => setMouseIsPressed(true)} onMouseUp={() => setMouseIsPressed(false)}>
-            <div className="secondTierNavigation">
+           <div className="secondTierNavigation">
                 <Dropdown className="secondTierNavigationSingleActionButton">
                     <Dropdown.Toggle className="secondTierNavigationDropDownButton">
                         Draw Maze
@@ -284,7 +286,7 @@ function Grid() {
                     </Dropdown.Menu>
                 </Dropdown>
 
-
+                <InfoModal style={{position:"absolute"}} />
                 <button className="secondTierNavigationSingleActionButton"
                     onClick={pickedAlgorithm == "dijkstra" ?
                         animateDijkstra : pickedAlgorithm == "A Star" ?

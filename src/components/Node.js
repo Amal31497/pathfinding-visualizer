@@ -2,9 +2,6 @@ import React,{ useEffect, useState } from "react";
 import Grid from "./Grid";
 import "./Node.css";
 
-
-
-
 export default function Node(props){
 
 

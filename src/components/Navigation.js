@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Container } from "react-bootstrap";
 import { FcMindMap } from 'react-icons/fc';
-
+import "../App.css";
 
 class Navigation extends React.Component {
 

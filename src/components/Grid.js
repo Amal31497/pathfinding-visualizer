@@ -69,9 +69,7 @@ function Grid() {
             }, 30 * i)
         }
     }
-
-
-
+    
 
     function generateRandomMaze(number){
         clearBoard();
@@ -299,7 +297,6 @@ function Grid() {
                         null
                     }
                 </button>
-
               
                 <button className="secondTierNavigationSingleActionButton" onClick={clearBoard}>Clear Board</button>
                 <Dropdown className="secondTierNavigationSingleActionButton">
@@ -320,11 +317,13 @@ function Grid() {
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Start</p>
                 </div>
                 <div style={{display:"flex"}}>
-                    <div className="finishNodeAnimation"></div>
+                    <div className="finishNodeAnimation">
+                        <div className="targetPoint"></div>
+                    </div>
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Target</p>
                 </div>
                 <div style={{display:"flex"}}>
-                    <div className="node node-visited"></div>
+                    <div className="node node-visited visitedNodeDisplay"></div>
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Visited Node</p>
                 </div>
                 <div style={{display:"flex"}}>
@@ -332,7 +331,7 @@ function Grid() {
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Wall</p>
                 </div>
                 <div style={{display:"flex"}}>
-                    <div className="node shortest-path"></div>
+                    <div className="node shortest-path shortestPathDisplay"></div>
                     <p style={{marginLeft:"10px", fontWeight:"700"}}> - Shortest Path</p>
                 </div>
             </div>
@@ -352,6 +351,7 @@ function Grid() {
                                     isVisited={isVisited}
                                     grid={grid}
                                     mouseIsPressed={mouseIsPressed}
+                                    startNode={grid[START_NODE_ROW][START_NODE_ROW]}
                                 />
                             )
                         })}

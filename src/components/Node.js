@@ -44,8 +44,11 @@ export default function Node(props){
 
         function buildWall(event,row,col){
             event.preventDefault();
-            grid[row][col].isWall = true;
-            document.getElementById(`node-${row}-${col}`).classList.add("node-wall");          
+
+            if(grid[row][col].isStart == false && grid[row][col].isFinish == false){
+                grid[row][col].isWall = true;
+                document.getElementById(`node-${row}-${col}`).classList.add("node-wall");  
+            }
         }
 
         return (
@@ -60,8 +63,11 @@ export default function Node(props){
                         <div className="startNodeCircle"></div>
                     }
                     {isFinish == true && 
-                        <div className="finishNodeAnimation"></div>
+                        <div className="finishNodeAnimation">
+                            <div className="targetPoint"></div>
+                        </div>
                     }  
+                    <div></div>
             </div>
         )
 }

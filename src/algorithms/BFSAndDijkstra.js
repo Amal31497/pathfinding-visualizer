@@ -1,5 +1,5 @@
 export function dijkstra(grid, startNode, finishNode) {
-
+    console.log(startNode);
     const visitedNodesInorder = [];
 
     const unvisitedNodes = getNodes(grid);
@@ -27,7 +27,8 @@ export function dijkstra(grid, startNode, finishNode) {
 
 function updatedUnvisitedNeighbors(node, grid) {
     const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
-    const unvisitedNeighborsWithoutWalls = unvisitedNeighbors.filter(node => node.isWall == false)
+    const unvisitedNeighborsWithoutWalls = unvisitedNeighbors.filter(node => node.isWall == false);
+    // console.log(unvisitedNeighborsWithoutWalls);
     node.neighbors = unvisitedNeighborsWithoutWalls;
     for (const neighbor of unvisitedNeighbors) {
         neighbor.distance = node.distance + 1;

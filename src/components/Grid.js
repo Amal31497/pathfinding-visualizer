@@ -7,22 +7,29 @@ import { AStar, findAStarShortestPath } from "../algorithms/AStar.js";
 import InfoModal from "./InfoModal";
 import "./Grid.css";
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 
-let START_NODE_ROW = 10;
-let START_NODE_COL = 10;
-let FINISH_NODE_ROW = 17;
-let FINISH_NODE_COL = 30;
+// let START_NODE_ROW = 10;
+// let START_NODE_COL = 10;
+// let FINISH_NODE_ROW = 17;
+// let FINISH_NODE_COL = 30;
 
 
 function Grid() {
 
+    const [START_NODE_ROW, setSTART_NODE_ROW] = useState(10);
+    const [START_NODE_COL, setSTART_NODE_COL] = useState(10);
+    const [FINISH_NODE_ROW, setFINISH_NODE_ROW] = useState(17);
+    const [FINISH_NODE_COL, setFINISH_NODE_COL] = useState(30);
+    const [startNodeSelected, setStartNodeSelected] = useState(false);
+    const [finishNodeSelected, setFinishNodeSelected] = useState(false);
     const [grid, setGrid] = useState([]);
     const [pickedAlgorithm, setPickedAlgorithm] = useState("");
     const [mouseIsPressed, setMouseIsPressed] = useState(false);
     const [algoNotSelected, setAlgoNotSelected] = useState(false);
     const [vizualizerInitiated, setVizualizerInitiated] = useState(false);
-    const [infoModal, setInfoModal] = useState(false);
 
     const createNode = (col, row) => {
         return {
@@ -35,6 +42,7 @@ function Grid() {
             f:Infinity,
             isVisited: false,
             isWall: false,
+            neighbors:[],
             previousNode: null
         };
     };
@@ -52,8 +60,13 @@ function Grid() {
     }
 
     useEffect(() => {
+        // setSTART_NODE_ROW(10);
+        // setSTART_NODE_COL(10);
+        // setFINISH_NODE_ROW(17);
+        // setFINISH_NODE_COL(30);
+
         getInitialGrid();
-    },[])
+    },[START_NODE_ROW, START_NODE_COL, FINISH_NODE_ROW, FINISH_NODE_COL])
 
     function toggleSelectAlgoPopover(){
         setAlgoNotSelected(true);
@@ -72,7 +85,6 @@ function Grid() {
         }
     }
     
-
     function generateRandomMaze(number){
         clearBoard();
         let randomMazeNodes = [];
@@ -95,7 +107,6 @@ function Grid() {
             }, i * 5)
         }
     }
-
 
     function generateRandomVerticalMaze(){
         clearBoard();
@@ -141,7 +152,6 @@ function Grid() {
             }, 10*index)
         })
     }
-
 
     function generateRandomHorizontalMaze(){
         clearBoard();
@@ -207,7 +217,7 @@ function Grid() {
 
         setTimeout(() => {
             animateShortestPath(shortestPath);
-        }, visitedNodes.length * 4.5)
+        }, visitedNodes.length * 6)
 
         setTimeout(() => {
             setVizualizerInitiated(false);
@@ -231,23 +241,11 @@ function Grid() {
 
         setTimeout(() => {
             animateShortestPath(shortestPathDijkstra);
-        }, 4.5 * visitedNodesInorder.length)
+        }, 6 * visitedNodesInorder.length)
 
         setTimeout(() => {
             setVizualizerInitiated(false);
         }, visitedNodesInorder.length * 9)
-    }
-
-    function clearBoard(){
-        for(let row = 0; row < grid.length; row++){
-            for(let col = 0; col < grid[0].length; col++){
-                if(grid[row][col].isStart == false && grid[row][col].isFinish == false){
-                    grid[row][col].isWall = false;
-                    grid[row][col].isVisited = false;
-                    document.getElementById(`node-${row}-${col}`).classList = "node";
-                }
-            }
-        }
     }
 
     function animateDFS(){
@@ -266,7 +264,117 @@ function Grid() {
 
         setTimeout(() => {
             animateShortestPath(shortestPath);
-        }, visitedNodesInorder.length * 0.8)
+        }, visitedNodesInorder.length * 1.4)
+    }
+
+    function clearBoard(){
+        for(let row = 0; row < grid.length; row++){
+            for(let col = 0; col < grid[0].length; col++){
+                if(!grid[row][col].isStart && !grid[row][col].isFinish){
+                    grid[row][col].isStart = false;
+                    grid[row][col].isFinish = false;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node ";
+                } else if(grid[row][col].isStart == true){
+                    grid[row][col].row = START_NODE_ROW;
+                    grid[row][col].col = START_NODE_COL;
+                    grid[row][col].isStart = true;
+                    grid[row][col].isFinish = false;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node node-start";
+                } else if(grid[row][col].isFinish == true){
+                    grid[row][col].row = FINISH_NODE_ROW;
+                    grid[row][col].col = FINISH_NODE_COL;
+                    grid[row][col].isStart = false;
+                    grid[row][col].isFinish = true;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node node-finish";
+                }
+            }
+        }
+    }
+
+    function clearWalls(){
+        for(let row = 0; row < grid.length; row++){
+            for(let col = 0; col < grid[0].length; col++){
+                if(!grid[row][col].isStart && !grid[row][col].isFinish && grid[row][col].isWall == true && grid[row][col].isVisited == false){
+                    grid[row][col].isStart = false;
+                    grid[row][col].isFinish = false;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node ";
+                } else if(grid[row][col].isStart == true){
+                    grid[row][col].row = START_NODE_ROW;
+                    grid[row][col].col = START_NODE_COL;
+                    grid[row][col].isStart = true;
+                    grid[row][col].isFinish = false;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node node-start";
+                } else if(grid[row][col].isFinish == true){
+                    grid[row][col].row = FINISH_NODE_ROW;
+                    grid[row][col].col = FINISH_NODE_COL;
+                    grid[row][col].isStart = false;
+                    grid[row][col].isFinish = true;
+                    grid[row][col].isWall = false;
+                    grid[row][col].isVisited = false;
+                    grid[row][col].distance = Infinity;
+                    grid[row][col].heuristic = Infinity;
+                    grid[row][col].f = Infinity;
+                    grid[row][col].previousNode = null;
+                    grid[row][col].neighbors = [];
+                    document.getElementById(`node-${row}-${col}`).classList = "node node-finish";
+                }
+            }
+        }
+    }
+
+    function handlePositionUpdateStart(grid, startRow, startCol){
+        setSTART_NODE_ROW(startRow);
+        setSTART_NODE_COL(startCol);
+        setGrid(grid);
+    }
+
+    function handlePositionsUpdateFinish(grid, finishRow, finishCol){
+        setFINISH_NODE_ROW(finishRow);
+        setFINISH_NODE_COL(finishCol);
+        setGrid(grid);
+    }
+
+    function startNodeOrNot(result){
+        setStartNodeSelected(result);
+    }
+
+    function finishNodeOrNot(result){
+        setFinishNodeSelected(result);
     }
 
     return (
@@ -287,6 +395,7 @@ function Grid() {
                 </Dropdown>
 
                 <InfoModal style={{position:"absolute"}} />
+                
                 <button className="secondTierNavigationSingleActionButton"
                     onClick={pickedAlgorithm == "dijkstra" ?
                         animateDijkstra : pickedAlgorithm == "A Star" ?
@@ -300,7 +409,17 @@ function Grid() {
                     }
                 </button>
               
-                <button className="secondTierNavigationSingleActionButton" onClick={clearBoard}>Clear Board</button>
+                <Dropdown className="secondTierNavigationSingleActionButton">
+                    <Dropdown.Toggle className="secondTierNavigationDropDownButton">
+                        Clear
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="dropDownModal">
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={clearBoard}>Clear Board</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={clearWalls}>Clear Walls</button></Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+
                 <Dropdown className="secondTierNavigationSingleActionButton">
                     <Dropdown.Toggle className="secondTierNavigationDropDownButton">
                         {pickedAlgorithm !== "" ? pickedAlgorithm : "Select Algorithm"}
@@ -309,7 +428,7 @@ function Grid() {
                     <Dropdown.Menu className="dropDownModal">
                         <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("dijkstra")}>Dijkstra</button></Dropdown.Item>
                         <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("A Star")}>A*</button></Dropdown.Item>
-                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setPickedAlgorithm("DFS")}>Depth First Search</button></Dropdown.Item>
+                        <Dropdown.Item className="dropdownItem"><button className="dropDownModalButton" onClick={() => setVizualizerInitiated(true), () => setPickedAlgorithm("DFS")}>Depth First Search</button></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -353,7 +472,16 @@ function Grid() {
                                     isVisited={isVisited}
                                     grid={grid}
                                     mouseIsPressed={mouseIsPressed}
-                                    startNode={grid[START_NODE_ROW][START_NODE_ROW]}
+                                    startRow={START_NODE_ROW}
+                                    startCol={START_NODE_COL}
+                                    finishRow={FINISH_NODE_ROW}
+                                    finishCol={FINISH_NODE_COL}
+                                    startNodeSelected={startNodeSelected}
+                                    finishNodeSelected={finishNodeSelected}
+                                    onChangeStart={handlePositionUpdateStart}
+                                    onChangeFinish={handlePositionsUpdateFinish}
+                                    onSelectStart={startNodeOrNot}
+                                    onSelectFinish={finishNodeOrNot}
                                 />
                             )
                         })}

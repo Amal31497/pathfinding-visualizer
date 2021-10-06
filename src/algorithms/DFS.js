@@ -1,19 +1,21 @@
 export function DFS(grid, startNode, finishNode){
-
+    startNode.isVisited = false;
     let stack = [startNode];
     let visitedNodes = [];
     while(stack.length > 0){
         let currentNode = stack.pop();
-
+        
         if(currentNode.isWall == true) continue;
-        if(currentNode.isVisited == true) continue;
-        if(currentNode == finishNode) break;
-
+        if(currentNode.isVisited == true && visitedNodes.includes(currentNode)) continue;
+        if(currentNode == finishNode){
+            return visitedNodes;
+        } 
+        
         currentNode.isVisited = true;
         visitedNodes.push(currentNode);
 
         let neighbors = getUnvisitedNeighbors(currentNode, grid);
-
+        
         neighbors.forEach(neighbor => {
             if(!visitedNodes.includes(neighbor)){
                 neighbor.previousNode = currentNode;

@@ -30,7 +30,7 @@ const InfoModal = () => {
         <div className={`infoModalWrapper ${skipAnimation}`}>
             {slideNumber == 1 &&
                 <>
-                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>Info</p>
+                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>?</p>
                     <img src={route} className={`infoModalImage ${skipAnimationDissapear}`} />
                     <h6 className={`infoModalHeader ${skipAnimationDissapear}`}>Pathifinding Visualizer</h6>
                     <p className={`infoModalTextComponent ${skipAnimationDissapear}`}>I created this visualizer to display popular pathfinding algorithms. If you'd like to learn how to use it just click on the <span id="guideMe">"Next"</span> button.</p>
@@ -40,7 +40,7 @@ const InfoModal = () => {
 
             {slideNumber == 2 &&
                 <>
-                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>Info</p>
+                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>?</p>
                     <h6 className={`infoModalHeader ${skipAnimationDissapear}`} style={{marginTop:"30px",marginBottom:"48px"}}>Available Pathifinding Algorithms</h6>
                     <p className={`infoModalTextComponent ${skipAnimationDissapear}`}><span id="guideMe">Dijkstra </span> - Super famous algorithm, finds the shortest path by using breadth-first-search principles</p>
                     <p className={`infoModalTextComponent ${skipAnimationDissapear}`}><span id="guideMe">A-Star </span> - One of the most efficient pathfinding algorithms, guarantees the shortest path and accounts for heuristic distance (distance from the target)</p>
@@ -50,7 +50,7 @@ const InfoModal = () => {
 
             {slideNumber == 3 &&
                 <>
-                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>Info</p>
+                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>?</p>
                     <h6 className={`infoModalHeader ${skipAnimationDissapear}`} style={{ marginTop: "15px", marginBottom: "15px" }}>How to use this vizualizer?</h6>
                     <div className={`infoModalTextComponent ${skipAnimationDissapear}`} style={{display:"flex", marginBottom:"15px"}}><div className="node-start" style={{marginLeft:"5px",marginRight:"auto", width:"5%"}}></div> - Start Node (This is where each of the algorihtms is going to start search)</div>
                     <div className={`infoModalTextComponent ${skipAnimationDissapear}`} style={{display:"flex", marginBottom:"15px"}}><div className="node-finish" style={{marginLeft:"auto",marginRight:"auto"}}><div className="targetPoint"></div></div> - End Node (Each algorithm has a goal of finding this node.</div>
@@ -62,7 +62,7 @@ const InfoModal = () => {
 
             {slideNumber == 4 &&
                 <>
-                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>Info</p>
+                    <p className={infoIcon} onClick={(event) => initiateGuideOpen(event)}>?</p>
                     <h6 className={`infoModalHeader ${skipAnimationDissapear}`}>Drawing Walls, Generating Mazes and Algorithms</h6>
                     <img src={mazeDropdown} className={`infoModalImage ${skipAnimationDissapear}`} />
                     <img src={algoDropdown} className={`infoModalImage ${skipAnimationDissapear}`} />

@@ -18,7 +18,7 @@
     height:26px;
     position:absolute;
     left:40%;
-    top:40px;
+    top:-35px;
     animation-name: tooltip;
     animation-delay: 1s;
     animation-duration: 2s;
